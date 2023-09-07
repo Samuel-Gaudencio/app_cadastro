@@ -1,42 +1,52 @@
 import tkinter
-from tkinter import *
+from tkinter import END
 import customtkinter as ctk
 import openpyxl
-from openpyxl import *
+
+e_cod = None
+e_name = None
+e_valor = None
+e_quant = None
+e_repre = None
+e_class = None
+
+
+def limpar_campos():
+    e_cod.delete(0, END)
+    e_name.delete(0, END)
+    e_valor.delete(0, END)
+    e_quant.delete(0, END)
+    e_repre.delete(0, END)
+    e_class.delete(0, END)
+
+
+def cadastrar_produto():
+    cod = e_cod.get()
+    name = e_name.get()
+    valor = e_valor.get()
+    quant = e_quant.get()
+    repre = e_repre.get()
+    classi = e_class.get()
+
+    fichario = openpyxl.load_workbook('registro.xlsx')
+    folha = fichario.active
+
+    folha.cell(column=1, row=folha.max_row+1, value=cod)
+    folha.cell(column=2, row=folha.max_row, value=name)
+    folha.cell(column=3, row=folha.max_row, value=valor)
+    folha.cell(column=4, row=folha.max_row, value=quant)
+    folha.cell(column=5, row=folha.max_row, value=repre)
+    folha.cell(column=6, row=folha.max_row, value=classi)
+
+    if name == "" or cod == "" or valor == "" or quant == "" or repre == "" or classi == "":
+        tkinter.messagebox.showwarning('Sistema', "ERROR\nPor favor preencha todos os campos!!")
+    else:
+        fichario.save(r'registro.xlsx')
+        tkinter.messagebox.showinfo('Sistema', "Produto cadastrado com sucesso!!")
 
 
 def janela_cadastro():
-    def limpar():
-        e_name.delete(0, END)
-        e_cod.delete(0, END)
-        e_valor.delete(0, END)
-        e_quant.delete(0, END)
-        e_repre.delete(0, END)
-        e_class.delete(0, END)
-
-    def cadastrar():
-        cod = e_cod.get()
-        name = e_name.get()
-        valor = e_valor.get()
-        quant = e_quant.get()
-        repre = e_repre.get()
-        classi = e_class.get()
-
-        fichario = openpyxl.load_workbook('registro.xlsx')
-        folha = fichario.active
-
-        folha.cell(column=1, row=folha.max_row+1, value=cod)
-        folha.cell(column=2, row=folha.max_row, value=name)
-        folha.cell(column=3, row=folha.max_row, value=valor)
-        folha.cell(column=4, row=folha.max_row, value=quant)
-        folha.cell(column=5, row=folha.max_row, value=repre)
-        folha.cell(column=6, row=folha.max_row, value=classi)
-
-        if name == "" or cod == "" or valor == "" or quant == "" or repre == "" or classi == "":
-            tkinter.messagebox.showwarning('Sistema', "ERROR\nPor favor prenchar todos os campos!!")
-        else:
-            fichario.save(r'registro.xlsx')
-            tkinter.messagebox.showinfo('Sistema', "Produto cadastrado com sucesso!!")
+    global e_cod, e_name, e_valor, e_quant, e_repre, e_class
 
     cadastro = ctk.CTkToplevel(root)
     cadastro.geometry('600x400')
@@ -56,13 +66,13 @@ def janela_cadastro():
 
     e_cod = ctk.CTkEntry(cadastro, placeholder_text='Código do Produto', text_color='#fff', font=('Montserrat', 12, 'bold'),
                          placeholder_text_color='#fff', width=250, fg_color='transparent', border_width=1)
-
     e_cod.place(x=10, y=95)
 
     label_name = ctk.CTkLabel(cadastro, text='Nome do Produto:', text_color='#fff', font=('Montserrat', 16, 'bold'))
     label_name.place(x=300, y=70)
 
-    e_name = ctk.CTkEntry(cadastro, placeholder_text='Nome do Produto', text_color='#fff', font=('Montserrat', 12, 'bold'),
+    e_name = ctk.CTkEntry(cadastro, placeholder_text='Nome do Produto', text_color='#fff',
+                          font=('Montserrat', 12, 'bold'),
                           placeholder_text_color='#fff', width=250, fg_color='transparent', border_width=1)
 
     e_name.place(x=300, y=95)
@@ -75,7 +85,8 @@ def janela_cadastro():
 
     e_valor.place(x=10, y=175)
 
-    label_quant = ctk.CTkLabel(cadastro, text='Quantidade do Produto:', text_color='#fff', font=('Montserrat', 16, 'bold'))
+    label_quant = ctk.CTkLabel(cadastro, text='Quantidade do Produto:', text_color='#fff',
+                               font=('Montserrat', 16, 'bold'))
     label_quant.place(x=300, y=150)
 
     e_quant = ctk.CTkEntry(cadastro, placeholder_text='Quantidade do Produto', text_color='#fff',
@@ -97,19 +108,20 @@ def janela_cadastro():
     label_class = ctk.CTkLabel(cadastro, text='Tipo do Produto:', text_color='#fff', font=('Montserrat', 16, 'bold'))
     label_class.place(x=300, y=230)
 
-    e_class = ctk.CTkEntry(cadastro, placeholder_text='Tipo do Produto', text_color='#fff', font=('Montserrat', 12, 'bold'),
+    e_class = ctk.CTkEntry(cadastro, placeholder_text='Tipo do Produto', text_color='#fff',
+                           font=('Montserrat', 12, 'bold'),
                            placeholder_text_color='#fff', width=250, fg_color='transparent', border_width=1)
 
     e_class.place(x=300, y=255)
 
     b_cadas = ctk.CTkButton(cadastro, text='CADASTRAR', text_color='#fff', fg_color='#C69749',
                             font=('Montserrat', 20, 'bold'),
-                            hover_color='#FF6400', command=cadastrar)
+                            hover_color='#FF6400', command=cadastrar_produto)
     b_cadas.place(x=130, y=330)
 
     b_limpar = ctk.CTkButton(cadastro, text='LIMPAR', text_color='#fff', fg_color='#C69749',
                              font=('Montserrat', 20, 'bold'),
-                             hover_color='#FF6400', command=limpar)
+                             hover_color='#FF6400', command=limpar_campos)
     b_limpar.place(x=320, y=330)
 
 
