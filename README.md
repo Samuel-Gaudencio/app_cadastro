@@ -23,7 +23,7 @@ Você pode baixá-lo em [python.org](https://www.python.org/).
 pip install openpyxl
 
 3. Clone este repositório:<br>
-git clone https://github.com/seu-usuario/app_cadastro.git
+git clone https://github.com/Samuel-Gaudencio/app_cadastro.git
 
 4. Navegue até o diretório do projeto:<br>
 cd app_cadastro
